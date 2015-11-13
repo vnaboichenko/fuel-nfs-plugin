@@ -1,0 +1,8 @@
+volumes_roles_mapping:
+  # Default role mapping
+  vlad_nfs:
+    - {allocate_size: "min", id: "os"}
+    - {allocate_size: "all", id: "cinder"}
+
+# Set here new volumes for your role
+volumes: []

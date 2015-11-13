@@ -1,0 +1,35 @@
+# These tasks will be merged into deployment graph. Here you
+# can specify new tasks for any roles, even built-in ones.
+# POST_DEPLOYMENT TASKS
+
+- id: vlad_nfs
+  type: group
+  role: [vlad_nfs]
+  requires: [deploy_start]
+  required_for: [deploy_end, primary-controller]
+  tasks: [fuel_pkgs, hiera, globals, tools, logging, netconfig,
+      hosts, firewall]
+  parameters:
+    strategy:
+      type: one_by_one
+
+- id: install_nfs
+  type: puppet
+  groups: [vlad_nfs]
+  requires: [netconfig]
+  required_for: [deploy_end]
+  parameters:
+    puppet_manifest: puppet/manifests/install_nfs.pp
+    puppet_modules: puppet/modules/:/etc/puppet/modules
+    timeout: 360
+
+- id: enable_cinder_nfs
+  type: puppet
+  groups: [primary-controller, controller]
+  requires: [openstack-cinder]
+  required_for: [deploy_end]
+  parameters:
+    puppet_manifest: puppet/manifests/enable_cinder_nfs.pp
+    puppet_modules: puppet/modules/:/etc/puppet/modules
+    timeout: 360
+

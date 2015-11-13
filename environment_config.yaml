@@ -1,0 +1,7 @@
+attributes:
+  username:
+    value: "/volume"
+    label: "Mountpoint"
+    description: "Mountpoint of NFS server. Example - /volume"
+    weight: 10
+    type: "text"
